@@ -15,6 +15,8 @@ abstract class ArrayResource extends CDAResource {
 
   Map<String, CDAEntry> entries;
 
+  List<CDAArrayError> errors;
+
   /**
    * @return items in this resource.
    */
@@ -34,5 +36,9 @@ abstract class ArrayResource extends CDAResource {
    */
   public Map<String, CDAEntry> entries() {
     return entries;
+  }
+
+  public List<CDAArrayError> errors() {
+    return errors;
   }
 }

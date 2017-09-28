@@ -61,4 +61,30 @@ public class LinkTest extends BaseTest {
   }) public void testEmptyLinks() throws Exception {
     client.sync().fetch();
   }
+
+  @SuppressWarnings("unchecked")
+  @Test @Enqueue(defaults = {
+      "links/space.json",
+      "links/content_types.json"
+  }, value = {
+      "errors/include_non_public_entries.json"
+  }) public void includeNonPublishedEntriesDoNotSurface() throws Exception {
+    final CDAArray array = client.fetch(CDAEntry.class).all();
+    assertThat(array.items().size()).isEqualTo(1);
+
+    final CDAEntry entry = (CDAEntry) array.items().get(0);
+    assertThat(entry.contentType().id()).isEqualTo("2s9novBkP2G0oasUaG8kCs");
+    assertThat(entry.rawFields().size()).isEqualTo(1);
+
+    final Object entries = entry.getField("entries");
+    assertThat(entries).isInstanceOf(List.class);
+    assertThat(((List) entries).get(0)).isInstanceOf(CDAEntry.class);
+
+    assertThat(array.errors().size()).isEqualTo(1);
+
+    final CDAArrayError error = array.errors().get(0);
+    assertThat(error.getDetails().getType()).isEqualTo("Link");
+    assertThat(error.getDetails().getLinkType()).isEqualTo("Entry");
+    assertThat(error.getDetails().getId()).isEqualTo("4iO7CN7tSE8aia4wm2CkmS");
+  }
 }
