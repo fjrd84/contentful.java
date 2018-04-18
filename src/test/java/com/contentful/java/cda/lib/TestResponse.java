@@ -7,7 +7,7 @@ public class TestResponse {
   private final String fileName;
   private final Headers headers;
 
-  TestResponse(int code, String fileName, String[] headers) {
+  public TestResponse(int code, String fileName, String[] headers) {
     this.code = code;
     this.fileName = fileName;
     this.headers = createHeaders(headers);
